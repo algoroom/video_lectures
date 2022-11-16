@@ -3,45 +3,73 @@
 
 
 /// Այս ստրուկտուրան նկարագրում է 1 պսևդո-դինամիկ զանգված։
-struct PdArray
+class PdArray
 {
+public:
 	/// Սա ցույց է տալիս զանգվածի առավելագույն չափսը։ Այս օրինակում այն 
 	/// հատատուն է բոլոր պսևդո-դինամիկ զանգվածների համար։
 	static constexpr int CAPACITY = 10;
 
+	// Հետևյալ բաժինը OOP (օբյեկտային-կողմնորոշված ծրագրավորման) տեսանկյունից 
+	// ճիշտ կլիներ հայտարարել որպես 'private', սակայն այն հայտարարված է 
+	// 'public' գլոբալ ֆունկցիաների ու վարժությունների համար ֆունկցիաների 
+	// կոդերը ավելի հակիրճ ու պարզ դարձնելու համար։
+//private:
+public:
 	/// Տարածքը, որտեղ պահվում են զանգվածի արժեքները։
 	int data[ CAPACITY ];
 
 	/// Թե այդ տարածքի առաջին քանի՞ արժեքներն են այս պահին օգտագործվում։
 	int size;
+
+public:
+	/// Լռելիությամբ կոնստրուկտոր
+	/// Ստեղծում է դատարկ զանգված
+	PdArray()
+	{
+		// Դատարկ զանգվածի ստանալու համար պետք է զրոյացնել միայն 'size'-ը
+		size = 0;
+	}
+
+	/// Ֆունկցիան ավելացնում է այս պսևդո-դինամիկ զանգվածի մեջ 'value' արժեքը 
+	/// այնպես, որ այն հայտնվի 'index' համարով դիրքում։
+	void insert( int index, int value )
+	{
+		// Ստուգում ենք արդյո՞ք կա տեղ նոր արժեքի համար
+		if ( size == CAPACITY )
+			return;
+		// Տեղաշարժում ենք անհրաժեշտ եղած արժեքները դեպի աջ
+		for ( int i = size - 1; i >= index; --i )
+			data[ i+1 ] = data[ i ];
+		// Կատարում ենք տեղադրումը
+		data[ index ] = value;
+		// Չենք մոռանում ավելացնել այս պահին օգտագործվող արժեքների քանակը
+		++size;
+	}
+
+	/// Ֆունկցիան հեռացնում է այս պսևդո-դինամիկ զանգվածից 'index' դիրքում 
+	/// գտնվող թիվը։
+	void remove( int index )
+	{
+		// Իրականացնել ինքնուրույն
+		//
+		//
+	}
+
+	/// Ֆունկցիան տպում է էկրանին փոխանցված այս պսևդո-դինամիկ զանգվածի 
+	/// պարունակությունը։
+	void print() const
+	{
+		std::cout << "[";
+		for ( int i = 0; i < size; ++i )
+			std::cout << " " << data[ i ];
+		std::cout << " ]" << std::endl;
+	}
+
 };
 
 
-/// Ֆունկցիան ավելացնում է 'a' պսևդո-դինամիկ զանգվածի մեջ 'value' արժեքը 
-/// այնպես, որ այն հայտնվի 'index' համարով դիրքում։
-void insert( PdArray& a, int value, int index )
-{
-	// Ստուգում ենք արդյո՞ք կա տեղ նոր արժեքի համար
-	if ( a.size == a.CAPACITY )
-		return;
-	// Տեղաշարժում ենք անհրաժեշտ եղած արժեքները դեպի աջ
-	for ( int i = a.size - 1; i >= index; --i )
-		a.data[ i+1 ] = a.data[ i ];
-	// Կատարում ենք տեղադրումը
-	a.data[ index ] = value;
-	// Չենք մոռանում ավելացնել այս պահին օգտագործվող արժեքների քանակը
-	++a.size;
-}
-
-
-/// Ֆունկցիան հեռացնում է տրված 'a' պսևդո-դինամիկ զանգվածից 'index' դիրքում 
-/// գտնվող թիվը։
-void remove( PdArray& a, int index )
-{
-	// Իրականացնել ինքնուրույն
-	//
-	//
-}
+// Գլոբալ ֆունկցիաներ
 
 
 /// Ֆունկցիան տրված 'a' պսևդո-դինամիկ զանգվածի հիման վրա ստեղծում ու 
@@ -49,9 +77,8 @@ void remove( PdArray& a, int index )
 /// ամեն արժեք կրկնվում է 2 անգամ, իսկ մնացածները պարզապես արտագրվում են։
 PdArray duplicateSome( const PdArray& a )
 {
-	// Ստեղխում ու սկզբնարժեքավորում ենք նոր զանգվածը
+	// Ստեղծում ենք նոր զանգվածը, առայժմ դատարկ
 	PdArray b;
-	b.size = 0;
 	// Անցնում ենք տրված զանգվածի արժեքներով
 	for ( int i = 0; i < a.size; ++i ) {
 		if ( a.data[ i ] < 10 ) {
@@ -126,41 +153,100 @@ void removeDuplicates( PdArray& a )
 }
 
 
-/// Ֆունկցիան տպում է էկրանին փոխանցված 'a' պսևդո-դինամիկ զանգվածի 
-/// պարունակությունը։
-void print( const PdArray& a )
-{
-	std::cout << "[";
-	for ( int i = 0; i < a.size; ++i )
-		std::cout << " " << a.data[ i ];
-	std::cout << " ]" << std::endl;
-}
-
-
 int main( int argc, char* argv[] )
 {
 	// Ստեղծում ենք դատարկ պսևդո-դինամիկ զանգված
 	PdArray a;
-	a.size = 0;
 
 	// Ավելացնում ենք առաջին արժեքները
-	insert( a, 8, 0 );
-	insert( a, 12, 1 );
-	insert( a, 4, 2 );
-	insert( a, 15, 3 );
-	print( a );  // [ 8, 12, 4, 15 ]
+	a.insert( 0, 8 );
+	a.insert( 1, 12 );
+	a.insert( 2, 4 );
+	a.insert( 3, 15 );
+	a.print();  // [ 8, 12, 4, 15 ]
 
 	PdArray b = duplicateSome( a );
-	print( b );  // [ 8, 8, 12, 4, 4, 15 ]
+	b.print();  // [ 8, 8, 12, 4, 4, 15 ]
 
 	// Ավելացնում ենք նաև բացասական թվեր
-	insert( b, -20, 4 );
-	insert( b, -8, 3 );
-	insert( b, -1, 3 );
-	insert( b, -6, 1 );
-	print( b );  // [ 8, -6, 8, 12, -1, -8, 4, -20, 4, 15 ]
+	b.insert( 4, -20 );
+	b.insert( 3, -8 );
+	b.insert( 3, -1 );
+	b.insert( 1, -6 );
+	b.print();  // [ 8, -6, 8, 12, -1, -8, 4, -20, 4, 15 ]
 
 	// Հեռացնում ենք այդ բացասական թվերը
 	removeNegative( b );
-	print( b );  // [ 8, 8, 12, 4, 4, 15 ]
+	b.print();  // [ 8, 8, 12, 4, 4, 15 ]
+
+	// Հանել մեկնաբանությունից 'remove()' մեթոդը իրականացնելուց հետո
+	/* {
+		std::cout << " === Testing 'remove()' === " << std::endl;
+		PdArray x;
+		x.insert( 0, 12 );
+		x.insert( 1, 4 );
+		x.insert( 2, 1 );
+		x.insert( 3, 9 );
+		x.insert( 4, 63 );
+		x.insert( 5, 25 );
+		x.print();  // [ 12, 4, 1, 9, 63, 25 ]
+		x.remove( 3 );
+		x.print();  // [ 12, 4, 1, 63, 25 ]
+		x.remove( 1 );
+		x.print();  // [ 12, 1, 63, 25 ]
+	} */
+
+	// Հանել մեկնաբանությունից 'repeatEvery2ndThreeTimes()' ֆունկցիան 
+	//   իրականացնելուց հետո
+	/* {
+		std::cout << " === Testing 'repeatEvery2ndThreeTimes()' === " << std::endl;
+		PdArray x;
+		x.insert( 0, 12 );
+		x.insert( 1, 4 );
+		x.insert( 2, 1 );
+		x.insert( 3, 9 );
+		x.insert( 4, 63 );
+		x.insert( 5, 25 );
+		x.print();  // [ 12, 4, 1, 9, 63, 25 ]
+		PdArray y = repeatEvery2ndThreeTimes( x );
+		y.print();  // [ 12, 4, 4, 4, 1, 9, 9, 9, 63, 25, 25, 25 ]
+	} */
+
+	// Հանել մեկնաբանությունից 'removeAtEvenIndexes()' ֆունկցիան 
+	//   իրականացնելուց հետո
+	/* {
+		std::cout << " === Testing 'removeAtEvenIndexes()' === " << std::endl;
+		PdArray x;
+		x.insert( 0, 5 );
+		x.insert( 1, 64 );
+		x.insert( 2, 22 );
+		x.insert( 3, 19 );
+		x.insert( 4, 37 );
+		x.insert( 5, 10 );
+		x.print();  // [ 5, 64, 22, 19, 37, 10 ]
+		removeAtEvenIndexes( x );
+		x.print();  // [ 64, 19, 10 ]
+	} */
+
+	// Հանել մեկնաբանությունից 'removeDuplicates()' ֆունկցիան 
+	//   իրականացնելուց հետո
+	/* {
+		std::cout << " === Testing 'removeDuplicates()' === " << std::endl;
+		PdArray x;
+		x.insert( 0, 5 );
+		x.insert( 1, 6 );
+		x.insert( 2, 6 );
+		x.insert( 3, 24 );
+		x.insert( 4, 19 );
+		x.insert( 5, 19 );
+		x.insert( 6, 19 );
+		x.insert( 7, 63 );
+		x.insert( 8, 63 );
+		x.insert( 9, 30 );
+		x.print();  // [ 5, 6, 6, 24, 19, 19, 19, 63, 63, 30 ]
+		removeDuplicates( x );
+		x.print();  // [ 5, 6, 24, 19, 63, 30 ]
+	} */
+
+	return 0;
 }
