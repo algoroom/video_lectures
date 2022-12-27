@@ -1,4 +1,4 @@
 # video_lectures
-Source codes in different lenguages, for all lectures of AlgoRoom.
+Source codes in different languages, for all lectures of AlgoRoom channel.
 
-Please visit the lectures at https://www.youtube.com/channel/UCyW2YneDEtZj3QMTbsxKj9g
+Please visit lectures at https://www.youtube.com/channel/UCyW2YneDEtZj3QMTbsxKj9g
