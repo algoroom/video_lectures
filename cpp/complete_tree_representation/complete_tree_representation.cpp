@@ -46,103 +46,24 @@ public:
 	}
 
 	/// Ֆունկցիան փոխակերպում է այս (this) հանգույցով սկսվող ավարտուն ծառը
-	/// դեպի զանգվածով ներկայացում, ու վերադարձնում է արժենքերը 'a' զանգվածի 
-	/// մեջ, դրա հետ մեկտեղ վերագրելով 'n'-ին այդ լրացվող զանգվածի չափը։
-	void convertToArray( int a[], int& n ) const
+	/// դեպի զանգվածով ներկայացում։
+	std::vector< int > convertToArray() const
 	{
 		// Իրականացնել ինքնուրույն
 		//
 		//
+		return std::vector< int >();
 	}
 
-
-
-
-
-	/// Ֆունկցիան հաշվում և վերադարձնում է այս (this) հանգույցով սկսվող ենթածառում
-	/// հանգույցների քանակը։
-	int treeSize() const
-	{
-		// Ստուգում ենք, արդյո՞ք խորանալիս դուրս չենք եկել ծառի տիրույթից
-		if ( this == nullptr )
-			return 0;
-		// Այլապես վստահ ենք, որ 'this'-ը ցույց է տալիս ինչ-որ հանգույցի վրա
-		return left->treeSize() + 1 + right->treeSize();
-	}
-
-	/// Ֆունկցիան հաշվում և վերադարձնում է այս (this) հանգույցով սկսվող ենթածառի
-	/// բարձրությունը։
-	int treeHeight() const
-	{
-		// Ստուգում ենք, արդյո՞ք խորանալիս դուրս չենք եկել ծառի տիրույթից
-		if ( this == nullptr )
-			return -1;  // Այնպիսի թիվ, որին 1 գումարելով ստանանք 
-			            // տերևի բարձրություն՝ այսինքն 0:
-		// Այլապես վստահ ենք, որ 'this'-ը ցույց է տալիս ինչ-որ հանգույցի վրա
-		return 1 + std::max( left->treeHeight(), right->treeHeight() );
-	}
-
-	/// Ֆունկցիան ստուգում է արդյո՞ք այս (this) հանգույցով սկսվող ենթածառը 
-	/// ամբողջ (full) ծառ է։
-	bool isFull() const
-	{
-		// Իրականացնել ինքնուրույն
-		//
-		//
-	}
-
-	/// Ֆունկցիան ստուգում է արդյո՞ք այս (this) հանգույցով սկսվող ենթածառը 
-	/// կատարյալ (perfect) ծառ է։
-	bool isPerfectByMethod1() const
-	{
-		int h = treeHeight();
-		int n = treeSize();
-		if ( n == (1 << (h+1)) - 1 )
-			return true;
-		else
-			return false;
-	}
-
-	/// Ֆունկցիան ստուգում է արդյո՞ք այս (this) հանգույցով սկսվող ենթածառը 
-	/// կատարյալ (perfect) ծառ է։
-	/// 
-	/// Ուշադրություն, սա O(N^2) վատագույն բարդությամբ աշխատող իրականացում է։
-	///   Օպտիմիզացումը թողնված է որպես վարժություն։
-	bool isPerfectByMethod2() const
-	{
-		if ( left == nullptr && right == nullptr )
-			return true;  // Սա տերև է
-		if ( left == nullptr || right == nullptr )
-			return false;  // Ծառը ունի միայն մեկ ենթածառ
-		// Այստեղից վստահ ենք որ կա 2 ենթածառ
-		if ( left->isPerfectByMethod2() ) {
-			if ( right->isPerfectByMethod2() ) {
-				int leftH = left->treeHeight();
-				int rightH = right->treeHeight();
-				int h = treeHeight();
-				if ( leftH == h-1 && rightH == h-1 )
-					return true;
-			}
-		}
-		return false;
-	}
-
-	/// Ֆունկցիան ստուգում է արդյո՞ք այս (this) հանգույցով սկսվող ենթածառը 
-	/// ավարտուն (complete) ծառ է։
-	bool isComplete() const
-	{
-		// Իրականացնել ինքնուրույն
-		//
-		//
-	}
 };
 
 
-/// Այս գլոբալ ֆունկցիան փոխակերպում է 'n' երկարություն ունեցող 'a' զանգվածով 
-/// փոխանցված ավարտուն ծառը, դեպի հանգույցներով և ցուցիչներով ներկայացում։
+/// Այս գլոբալ ֆունկցիան փոխակերպում է 'a' զանգվածով փոխանցված ավարտուն ծառը, 
+/// դեպի հանգույցներով և ցուցիչներով ներկայացում։
 /// Վերադարձնում է կառուցված ծառի արմատի վրա ցուցիչը։
-Node* convertToNodes( const int a[], int n )
+Node* convertToNodes( const std::vector< int >& a )
 {
+	const int n = (int)a.size();
 	// Ստեղծում ենք հանգույցների զանգվածը
 	std::vector< Node* > b( n );
 	for ( int i = 0; i <= n-1; ++i )
@@ -184,22 +105,30 @@ int main( int argc, char* argv[] )
 						new Node( 3 ) ) );
 
 		// Բացել այս կտորը 'convertToArray()' ֆունկցիան իրականացնելուց հետո
-		std::cout << "Converting tree to array ... " << std::endl;
+		//
+		/* std::cout << "Converting tree to array ... " << std::endl;
 		// Փոխակերպում ենք ավարտուն ծառը զանգվածի
-		int a[ 100 ], n;
-		completeTreeRoot->convertToArray( a, n );
+		std::vector< int > a = completeTreeRoot->convertToArray();
+		const int n = (int)a.size();
 		// Տպում ենք ստացված զանգվածը
 		std::cout << " [";
 		for ( int i = 0; i < n; ++i )
 			std::cout << " " << a[ i ];
-		std::cout << " ]" << std::endl;
+		std::cout << " ]" << std::endl; */
 	}
 
 	{
-		std::cout << "Converting array to tree ... " << std::endl;
-		int a[] = { };
-		int n = sizeof(a) / sizeof(int);
+		std::cout << "Converting array to tree (case 1) ... " << std::endl;
+		std::vector< int > a = { 5, 3, 2, 19, 34, 21, 67, 24, 78, 6 };
+		Node* root = convertToNodes( a );
+		root->print();
+	}
 
+	{
+		std::cout << "Converting array to tree (case 2) ... " << std::endl;
+		std::vector< int > a = { 20, 34, 9, 56, 87, 4 };
+		Node* root = convertToNodes( a );
+		root->print();
 	}
 
 	return 0;
