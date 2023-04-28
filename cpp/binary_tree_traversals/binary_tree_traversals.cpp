@@ -70,7 +70,7 @@ public:
 
 	/// Ֆունկցիան տպում է այս (this) հանգույցով սկսվող ենթածառը էկրանին, պտտած 
 	/// 90 աստիճանով դեպի ձախ, էկրանի ձախ եզրից 'indent' հեռավորության վրա։
-	void printTree( int indent ) const
+	void printTree( int indent = 0 ) const
 	{
 		// Տպում ենք աջ ենթածառը
 		if ( right != nullptr )
@@ -130,7 +130,7 @@ int main( int argc, char* argv[] )
 							new Node( 14 ), 
 							new Node( 19 ) ),
 					new Node( 4 ) ) );
-
+	
 	// Տպում ենք ըստ preorder շրջանցման
 	std::cout << "Preorder traversal: " << std::endl;
 	std::cout << " [";
@@ -153,15 +153,68 @@ int main( int argc, char* argv[] )
 	root->traversePostorder();
 	std::cout << " ]" << std::endl; */
 
+	// Բացել այս կտորը 'inorderNext()' ֆունկցիան իրականացնելուց հետո
+	//
+	/* // Գտնում ենք ըստ inorder հաջորդականության հաջորդ արժեքներին
+	{
+		Node* nodeWith16 = root->left;  // 16-ը արմատի ձախ երեխան է
+		Node* nextOf16 = inorderNext( nodeWith16 );
+		std::cout << " Inorder next from '16' is: " << nextOf16->value << std::endl;
+				// Պետք է լինի '3'
+	}
+	{
+		Node* nodeWith4 = root;  // 4-ը արմատում է
+		Node* nextOf4 = inorderNext( nodeWith4 );
+		std::cout << " Inorder next from '4' is: " << nextOf4->value << std::endl;
+				// Պետք է լինի '14'
+	}
+	{
+		Node* nodeWith19 = root->right->left->right;  // 19 արժեքով հանգույցը
+		Node* nextOf19 = inorderNext( nodeWith19 );
+		std::cout << " Inorder next from '19' is: " << nextOf19->value << std::endl;
+				// Պետք է լինի '20'
+	} */
 
-	// Write test for 'inorderNext()'
+	// Ստեղծում ենք ինչ-որ այլ ծառ
+	//
+	//
+	//            25
+	//      33           20
+	//    7      12             4
+	//  1      4              9
+	//                      32
+	//
+	Node* root2 = new Node( 25, 
+			new Node( 33, 
+					new Node( 7, 
+							new Node( 1 ), 
+							nullptr ), 
+					new Node( 12, 
+							new Node( 4 ), 
+							nullptr ) ), 
+			new Node( 20, 
+					nullptr,
+					new Node( 4, 
+							new Node( 9, 
+									new Node( 32 ), 
+									nullptr ), 
+							nullptr ) ) );
 
+	// Տպում ենք էկրանին այդ 2 ծառերը
+	std::cout << " === Tree 1 === " << std::endl;
+	root->printTree();
+	std::cout << " === Tree 2 === " << std::endl;
+	root2->printTree();
 
-	// Write test for 'print()'
-
-
-	// Write test for 'traverseBFS()'
-
+	// Բացել այս կտորը 'traverseBFS()' ֆունկցիան իրականացնելուց հետո։
+	//
+	/* std::cout << "BFS traversal of tree 1: " << std::endl;
+	traverseBFS( root );
+			// Պետք է ստացվի [ 4, 16, 20, 7, 3, 8, 4, 14, 19 ]
+	std::cout << "BFS traversal of tree 2: " << std::endl;
+	traverseBFS( root2 );
+			// Պետք է ստացվի [ 25, 33, 20, 7, 12, 4, 1, 4, 9, 32 ]
+			*/
 
 	return 0;
 }
